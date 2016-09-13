@@ -1,12 +1,12 @@
 from distutils.core import setup
 from setuptools import find_packages
 
-version='0.4'
+version='0.6'
 
 setup(
     name='trac-emoji',
     url='https://github.com/pykler/TracEmoji',
-    long_description='Emoji plugin for trac implementing https://github.com/arvida/emoji-cheat-sheet.com',
+    long_description='Emoji plugin for trac implementing https://github.com/WebpageFX/emoji-cheat-sheet.com.git',
     author='Hatem Nassrat',
     author_email='hatem@nassrat.ca',
     version=version,
