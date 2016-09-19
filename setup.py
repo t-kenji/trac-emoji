@@ -4,7 +4,7 @@ from setuptools import find_packages
 version='0.6'
 
 setup(
-    name='trac-emoji',
+    name='TracEmojiPlugin',
     url='https://github.com/pykler/TracEmoji',
     long_description='Emoji plugin for trac implementing https://github.com/WebpageFX/emoji-cheat-sheet.com.git',
     author='Hatem Nassrat',
