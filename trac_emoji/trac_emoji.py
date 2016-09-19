@@ -38,18 +38,10 @@ class TracEmoji(Component):
     def add_strategy(self):
         return {
             'id': 'emoji',
-            'match': '/\B:([\-+\w]*)$/',
+            'match': '\B:([\-+\w]*)$',
             'candidates': self.candidates,
-            'template': """
-function (value) {
-    return '<img src="/trac-plugin-test/chrome/trac_emoji/icons/' + value + '.png" style="height: 3ex; margin-bottom: -0.5ex;" alt=":' + value + ':" title=":' + value + ':" ></img>' + value;
-}
-""",
-            'replace': """
-function (value) {
-    return ':' + value + ': ';
-}
-""",
+            'template': 'return \'<img src="/trac-plugin-test/chrome/trac_emoji/icons/\' + value + \'.png" style="height: 3ex; margin-bottom: -0.5ex;" alt=":\' + value + \':" title=":\' + value + \':" ></img>\' + value',
+            'replace': 'return \':\' + value + \': \'',
             'index': 1
         }
 
