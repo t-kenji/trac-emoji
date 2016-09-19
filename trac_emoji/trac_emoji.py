@@ -19,7 +19,7 @@ class TracEmoji(Component):
 
     HTDOCS_PREFIX = 'trac_emoji'
     EMOJI_DIR = '/icons'
-    STYLE = 'height: 3ex; margin-bottom: -0.5ex;'
+    STYLE = 'height: 3ex; margin-bottom: 0.3ex; vertical-align: middle;'
 
     def __init__(self, *args, **kwargs):
         self.emojies = {}
@@ -40,7 +40,7 @@ class TracEmoji(Component):
             'id': 'emoji',
             'match': '\B:([\-+\w]*)$',
             'candidates': self.candidates,
-            'template': 'return \'<img src="/trac-plugin-test/chrome/trac_emoji/icons/\' + value + \'.png" style="height: 3ex; margin-bottom: -0.5ex;" alt=":\' + value + \':" title=":\' + value + \':" ></img>\' + value',
+            'template': 'return \'<img src="/trac-plugin-test/chrome/trac_emoji/icons/\' + value + \'.png" style="' + self.STYLE + '" alt=":\' + value + \':" title=":\' + value + \':" ></img>\' + value',
             'replace': 'return \':\' + value + \': \'',
             'index': 1
         }
