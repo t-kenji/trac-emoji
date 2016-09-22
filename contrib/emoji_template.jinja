@@ -1,0 +1,36 @@
+/* glue: {{ version }} hash: {{ hash }} */
+.emoji {
+  background-image: url('{{ sprite_path }}');
+  background-repeat: no-repeat;
+}
+{% for r, ratio in ratios.items() %}
+@media screen and (-webkit-min-device-pixel-ratio: {{ ratio.ratio }}), screen and (min--moz-device-pixel-ratio: {{ ratio.ratio }}), screen and (-o-min-device-pixel-ratio: {{ ratio.fraction }}), screen and (min-device-pixel-ratio: {{ ratio.ratio }}), screen and (min-resolution: {{ ratio.ratio }}dppx) {
+  .emoji {
+    --sprite-width: {{ width }};
+    --sprite-height: {{ height }};
+    --sprite-render-width: 3ex;
+    --sprite-render-height: 3ex;
+    --sprite-emoji-background-size-x: calc(var(--sprite-width) * 1px);
+    --sprite-emoji-background-size-y: calc(var(--sprite-height) * 1px);
+    background-image: url('{{ ratio.sprite_path }}');
+    -webkit-background-size: var(--sprite-emoji-background-size-x) var(--sprite-emoji-background-size-y);
+    -moz-background-size: var(--sprite-emoji-background-size-x) var(--sprite-emoji-background-size-y);
+    background-size: var(--sprite-emoji-background-size-x) var(--sprite-emoji-background-size-y);
+    image-rendering: -webkit-optimize-contrast;
+    display: inline-block;
+    margin-bottom: -0.3ex;
+    vertical-align: middle;
+  }
+}
+{% endfor %}{% for image in images %}
+.{{ image.label }}{{ image.pseudo }} {
+  --sprite-emoji-background-position-x: {{ image.x }};
+  --sprite-emoji-background-position-y: {{ image.y }};
+  --sprite-emoji-background-size-x: calc(var(--sprite-render-width) * (var(--sprite-width) / {{ image.width }}));
+  --sprite-emoji-background-size-y: calc(var(--sprite-render-height) * (var(--sprite-height) / {{ image.height }}));
+  background-position-x: calc((var(--sprite-emoji-background-position-x) / var(--sprite-width)) * var(--sprite-emoji-background-size-x));
+  background-position-y: calc((var(--sprite-emoji-background-position-y) / var(--sprite-height)) * var(--sprite-emoji-background-size-y));
+  width: var(--sprite-render-width);
+  height: var(--sprite-render-height);
+}
+{% endfor %}

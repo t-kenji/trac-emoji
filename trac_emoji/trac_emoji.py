@@ -6,32 +6,21 @@ from genshi.builder import tag
 
 from trac.core import *
 from trac.wiki.api import IWikiSyntaxProvider
+from trac.web.api import IRequestFilter
 from trac.web.chrome import ITemplateProvider, \
-                            add_script, add_stylesheet
+                            add_stylesheet
 
 from autocomplete_provider.api import IStrategyAdapter
+
+import emojis
 
 class TracEmoji(Component):
     """
     Allows for emoji from https://github.com/arvida/emoji-cheat-sheet.com
     """
-    implements(IWikiSyntaxProvider, ITemplateProvider, IStrategyAdapter)
+    implements(IRequestFilter, IWikiSyntaxProvider, ITemplateProvider, IStrategyAdapter)
 
     HTDOCS_PREFIX = 'trac_emoji'
-    EMOJI_DIR = '/icons'
-    STYLE = 'height: 3ex; margin-bottom: 0.3ex; vertical-align: middle;'
-
-    def __init__(self, *args, **kwargs):
-        self.emojies = {}
-        self.candidates = []
-        icons = os.listdir(''.join([self.htdocs_loc, self.EMOJI_DIR]))
-        for icon in icons:
-            if icon.endswith('.png'):
-                self.candidates.append(icon[:-4])
-                emoji = ':%s:' % icon[:-4]
-                self.emojies[emoji] = icon
-        self.candidates.sort()
-        super(self.__class__, self).__init__(*args, **kwargs)
 
     # IStrategyAdapter methods
 
@@ -39,8 +28,8 @@ class TracEmoji(Component):
         return {
             'id': 'emoji',
             'match': '\B:([\-+\w]*)$',
-            'candidates': self.candidates,
-            'template': 'return \'<img src="'+ self.env.href() + '/chrome/trac_emoji/icons/\' + value + \'.png" style="' + self.STYLE + '" alt=":\' + value + \':" title=":\' + value + \':" ></img>\' + value',
+            'candidates': emojis.candidates,
+            'template': 'return \'<i class="emoji emoji-\' + value.replace(/\+/g, \'\') + \'"></i>\' + value',
             'replace': 'return \':\' + value + \': \'',
             'index': 1
         }
@@ -58,24 +47,26 @@ class TracEmoji(Component):
         yield (r"(?P<emoji>:[^ ]+:)", create_emoji)
 
     def _format_emoji(self, formatter, emoji):
-        emoji_image = self.emojies.get(emoji)
-        if emoji_image is None:
+        if emoji[1:-1] not in emojis.candidates:
             return emoji
         else:
-            return tag.img(
-                src=formatter.href.chrome('/%s%s/%s' %(
-                    self.HTDOCS_PREFIX, self.EMOJI_DIR, emoji_image)),
-                alt=emoji,
-                title=emoji,
-                style=self.STYLE)
+            return tag.i(title=emoji, class_='emoji emoji-{}'.format(emoji[1:-1].replace('+', '')))
 
     # ITemplateProvider methods
-    def get_htdocs_loc(self):
-        return pkg_resources.resource_filename(__name__, 'htdocs')
-    htdocs_loc = property(get_htdocs_loc)
 
     def get_htdocs_dirs(self):
-        return [(self.HTDOCS_PREFIX, self.htdocs_loc)]
+        return [(self.HTDOCS_PREFIX, pkg_resources.resource_filename(__name__, 'htdocs'))]
 
     def get_templates_dirs(self):
         return []
+
+    # IRequestFilter methods
+
+    def pre_process_request(self, req, handler):
+        return handler
+
+    def post_process_request(self, req, template, data, content_type):
+        if template is not None and template in ('ticket.html', 'bs_ticket.html',
+                                                 'wiki_edit.html', 'bs_wiki_edit.html'):
+            add_stylesheet(req, self.HTDOCS_PREFIX + '/css/emojis.css')
+        return template, data, content_type
