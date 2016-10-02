@@ -29,7 +29,7 @@ class TracEmoji(Component):
             'id': 'emoji',
             'match': '\B:([\-+\w]*)$',
             'candidates': emojis.candidates,
-            'template': 'return \'<i class="emoji emoji-\' + value.replace(/\+/g, \'\') + \'"></i>\' + value',
+            'template': 'return \'<i class="emoji"><img src="{}/chrome/{}/emojis.png" class="emoji emoji-\' + value.replace(/\+/g, \'\') + \'" /></i>\' + value'.format(self.env.href(), self.HTDOCS_PREFIX),
             'replace': 'return \':\' + value + \': \'',
             'index': 1
         }
@@ -50,7 +50,11 @@ class TracEmoji(Component):
         if emoji[1:-1] not in emojis.candidates:
             return emoji
         else:
-            return tag.i(title=emoji, class_='emoji emoji-{}'.format(emoji[1:-1].replace('+', '')))
+            return tag.i(tag.img(src=formatter.href.chrome('/{}/emojis.png'.format(self.HTDOCS_PREFIX)),
+                                 class_='emoji emoji-{}'.format(emoji[1:-1].replace('+', '')),
+                                 alt=emoji,
+                                 title=emoji),
+                         class_='emoji')
 
     # ITemplateProvider methods
 
