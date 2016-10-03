@@ -71,6 +71,7 @@ class TracEmoji(Component):
 
     def post_process_request(self, req, template, data, content_type):
         if template is not None and template in ('ticket.html', 'bs_ticket.html',
+                                                 'wiki_view.html', 'bs_wiki_view.html',
                                                  'wiki_edit.html', 'bs_wiki_edit.html'):
             add_stylesheet(req, self.HTDOCS_PREFIX + '/css/emojis.css')
         return template, data, content_type
