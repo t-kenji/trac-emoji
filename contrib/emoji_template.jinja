@@ -27,7 +27,7 @@ img.{{ image.label }}{{ image.pseudo }} {
   --sprite-emoji-background-position-y: {{ image.y }};
   --sprite-emoji-background-size-x: calc(var(--sprite-render-width) * (var(--sprite-width) / {{ image.width }}));
   --sprite-emoji-background-size-y: calc(var(--sprite-render-height) * (var(--sprite-height) / {{ image.height }}));
-  left: calc((var(--sprite-emoji-background-position-x) / var(--sprite-width)) * var(--sprite-emoji-background-size-x));
-  top: calc((var(--sprite-emoji-background-position-y) / var(--sprite-height)) * var(--sprite-emoji-background-size-y));
+  left: calc((var(--sprite-emoji-background-position-x) / var(--sprite-width)) * var(--sprite-render-width) * (var(--sprite-width) / {{ image.width }}));
+  top: calc((var(--sprite-emoji-background-position-y) / var(--sprite-height)) * var(--sprite-render-height) * (var(--sprite-height) / {{ image.height }}));
 }
 {% endfor %}
