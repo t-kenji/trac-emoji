@@ -1,1 +1,1 @@
-recursive-include trac_emoji/htdocs *
+recursive-include tracemoji/htdocs *

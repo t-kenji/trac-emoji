@@ -11,7 +11,7 @@ Install
 
 Run the following command::
 
-    pip install trac-emoji
+    pip install git+https://github.com/t-kenji/trac-emoji-plugin.git
 
 Add the following to your trac conf::
 

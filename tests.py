@@ -1,6 +1,6 @@
 import unittest
 from minimocktest import MockTestCase
-from trac.core import ComponentManager 
+from trac.core import ComponentManager
 from trac_emoji import TracEmoji
 import re
 

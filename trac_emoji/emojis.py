@@ -1,7 +1,7 @@
 
 # -*- coding: utf-8 -*-
 
-candidates = [
+source = [
 '+1',
 '-1',
 '100',
@@ -884,5 +884,4 @@ candidates = [
 'zap',
 'zero',
 'zzz',
-
 ]
